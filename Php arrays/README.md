@@ -61,7 +61,7 @@ ascending order, according to keys
 
 # krsort()
 
-reverse of **ksort**()
+reverse of **ksort**()p
 
 # arsort
 
