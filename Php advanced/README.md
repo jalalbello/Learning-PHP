@@ -436,3 +436,82 @@ printFormatted("Hello world", "ask");
 // function ask(Hello world)
 ```
 
+### Php JSON 
+
+Here is how an associative array looks in php:
+
+```php
+$age = array("Peter"=>35, "Ben"=>37, "Joe"=>43);
+print_r ($age);
+Array ( [Peter] => 35 [Ben] => 37 [Joe] => 43 ) 
+```
+Here is how it would looking using **json_encode**
+
+```php
+echo json_encode($age);
+{"Peter":35,"Ben":37,"Joe":43}
+```
+
+How a normal array would look in php:
+
+```php
+$cars = array("Volvo", "BMW", "Toyota");
+print_r($cars);
+Array ( [0] => Volvo [1] => BMW [2] => Toyota )
+```
+
+Here is how it would looking using **json_encode**
+```php
+echo json_encode($cars);
+["Volvo","BMW","Toyota"]
+```
+
+*Reverse can be done using **json_decode***
+
+Aceessing values:
+```php
+$obj = json_decode($jsonobj);
+
+echo $obj->Peter;
+echo $obj->Ben;
+echo $obj->Joe;
+```
+
+or 
+
+```php
+$arr = json_decode($jsonobj, true);
+
+echo $arr["Peter"];
+echo $arr["Ben"];
+echo $arr["Joe"];
+```
+
+> Diffrence being the **true** flag
+
+Looping Through the Values:
+
+```php
+$jsonobj = '{"Peter":35,"Ben":37,"Joe":43}';
+
+$obj = json_decode($jsonobj);
+
+foreach($obj as $key => $value) {
+  echo $key . " => " . $value . "<br>";
+}
+```
+
+or 
+
+```php
+$jsonobj = '{"Peter":35,"Ben":37,"Joe":43}';
+
+$arr = json_decode($jsonobj, true);
+
+foreach($arr as $key => $value) {
+  echo $key . " => " . $value . "<br>";
+}
+```
+
+> Diffrence being the **true** flag
+****
