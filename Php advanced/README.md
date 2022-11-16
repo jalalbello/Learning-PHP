@@ -227,4 +227,212 @@ setcookie(name, value, expire, path, domain, secure, httponly);
 // * Only the name parametere is required
 ```
 
-Modify cookie
+Modify cookie:
+
+Set it again with setcookie()
+
+Delete cookie:
+
+Do a setcookie() function with an expiration date in the past:
+
+```php
+// Delete cookie
+setcookie("user", "", time() - 3600);
+```
+
+Check if cookies are enabled:
+
+```php
+// First set it
+setcookie("test_cookie", "test", time() + 3600, '/');
+```
+
+```php
+// Second check it 
+if(count($_COOKIE) > 0) {
+  echo "Cookies are enabled.";
+} else {
+  echo "Cookies are disabled.";
+}
+```
+> You might need to put them in **two diffrent** php tags
+
+### **Php Sessions**
+
+A web server (HTTP address) does not maintain **STATE**, and therefore cannot know **who we are**, and **what we do**
+
+A session is a way to store info in vars to be used across multiple pages
+
+Its not stored on the users computer
+
+They last until the users **closes** the browser
+- How does it work? How does it know it's me?:
+
+sessions set a user-key on the user's computer,  when a session is opened on another page, it scans the computer for a user-key. If there is a match, it accesses that session, if not, it starts a new session.
+
+- Start a Session :
+
+```php
+// Start the session
+session_start();
+```
+
+- Set a Session:
+
+```php
+// with the PHP global variable: $_SESSION
+$_SESSION["favanimal"] = "cat";
+```
+
+ - Print Contents of a session:
+
+
+**print_r**:
+It is a built-in function in print_r in PHP that is used to print or display the contents of a variable. It essentially prints human-readable data about a variable.
+
+```php
+print_r($_SESSION);
+```
+
+- Modify Content of a session
+
+```php
+// overwriting the session variable
+$_SESSION["favcolor"] = "yellow";
+```
+
+- Destory a php session
+
+> use **both** session_unset() and session_destroy()
+```php
+// remove all session variables
+session_unset();
+
+// destroy the session
+session_destroy();
+```
+
+
+### **PHP Filters**
+Php filters are used to **Validate**(if its in proper form) or **Sanitize**(if it has illegal char) data
+
+> Filters List 
+<table>
+<tr><td>int</td><td>257</td></tr><tr><td>boolean</td><td>258</td></tr><tr><td>float</td><td>259</td></tr><tr><td>validate_regexp</td><td>272</td></tr><tr><td>validate_domain</td><td>277</td></tr><tr><td>validate_url</td><td>273</td></tr><tr><td>validate_email</td><td>274</td></tr><tr><td>validate_ip</td><td>275</td></tr><tr><td>validate_mac</td><td>276</td></tr><tr><td>string</td><td>513</td></tr><tr><td>stripped</td><td>513</td></tr><tr><td>encoded</td><td>514</td></tr><tr><td>special_chars</td><td>515</td></tr><tr><td>full_special_chars</td><td>522</td></tr><tr><td>unsafe_raw</td><td>516</td></tr><tr><td>email</td><td>517</td></tr><tr><td>url</td><td>518</td></tr><tr><td>number_int</td><td>519</td></tr><tr><td>number_float</td><td>520</td></tr><tr><td>add_slashes</td><td>523</td></tr><tr><td>callback</td><td>1024</td></tr>
+</table>
+
+### Php filter_var() Function
+
+It can **both** validate and sanitize data
+
+```php
+Syntax:
+filter_var(var, FILTER_SANITIZE_STRING))
+// Can take other types of filters aswell
+```
+
+Validate int:
+
+```php
+if (filter_var($int, FILTER_VALIDATE_INT) === 0 || !filter_var($int, FILTER_VALIDATE_INT) === false) {
+  echo("Integer is valid");
+} else {
+  echo("Integer is not valid");
+}
+// filter_var($int, FILTER_VALIDATE_INT) === 0  is used cuz if $int was set to 0, the function without it will exec else statement
+```
+
+Validate IP adress :
+
+```php
+// Results in a **boolean**
+filter_var($ip, FILTER_VALIDATE_IP)
+```
+Validate and Sanitize URL :
+
+```php
+$url = filter_var($url, FILTER_SANITIZE_URL);
+// Validate url
+if (!filter_var($url, FILTER_VALIDATE_URL) === false) 
+```
+> For more filters : https://www.w3schools.com/php/php_ref_filter.asp
+
+Validate an Integer Within a Range:
+
+```php
+if (filter_var($int, FILTER_VALIDATE_INT, array("options" => array("min_range"=>$min, "max_range"=>$max))
+// the function accepts an options array, which again (depending on which options you're going to use) accepts one or more sub arrays
+```
+
+Validate IPV6 adress :
+
+```php
+$ip = "2001:0db8:85a3:08d3:1319:8a2e:0370:7334";
+
+if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) === false)
+
+```
+Validate URL - Must Contain QueryString :
+
+A query string is a part of a uniform resource locator (URL) that assigns values to specified parameters.
+
+```php
+if (!filter_var($url, FILTER_VALIDATE_URL, FILTER_FLAG_QUERY_REQUIRED) === false)
+```
+
+**Validate STRING FLAGS:**
+
+FILTER_FLAG_STRIP_LOW
+```php
+Remove characters with ASCII value < 32
+```
+FILTER_FLAG_STRIP_HIGH
+```php
+Remove characters with ASCII value > 127
+filter_var($str, FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH)
+```
+
+### **PHP Anon Functions**
+
+```php
+$var = function ($x) {return pow($x,3);};
+// Function above has no name, making it anon
+```
+### **PHP Call back Functions with Anon functions**
+
+A Callback if a function that has another function as its argument
+
+> Example of a callback function
+```php
+function my_callback($item) {
+  return strlen($item);
+}
+```
+> Example of a callback function using an **anon** function as its **arg**
+```php
+$lengths = array_map( function($item) { return strlen($item); } , $strings);
+```
+
+> Practical example of a call back function
+
+```php
+function exclaim($str) {
+  return $str . "! ";
+}
+
+function ask($str) {
+  return $str . "? ";
+}
+
+function printFormatted($str, $format) {
+  // Calling the $format callback function
+  echo $format($str);
+}
+
+// Pass "exclaim" and "ask" as callback functions to printFormatted()
+printFormatted("Hello world", "exclaim");
+// function exclaim(Hello world)
+printFormatted("Hello world", "ask");
+// function ask(Hello world)
+```
+
